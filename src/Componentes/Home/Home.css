@@ -1,0 +1,36 @@
+.titel{
+    text-align: center;
+    margin-top: 70px;
+    
+    
+}
+
+.container {
+    max-width: 1200px; 
+    margin: 0 auto; 
+  }
+  
+
+  
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 16px; 
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .card p {
+    font-size: 14px;
+    color: #555;
+  }
