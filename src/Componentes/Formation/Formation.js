@@ -16,9 +16,12 @@ function Formation() {
         dispatch(getAllFormations());
     }, [dispatch]);
 
-    useEffect(() => {
-        console.log("formations", formations);
-    }, [formations]);
+    const filtredFormations = (allFormations) => {
+        if (!allFormations && allFormations.length <= 0) {
+            return []
+        }
+        return allFormations.filter(formation => formation.status === 'active');
+    }
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -31,10 +34,18 @@ function Formation() {
     };
     
     const archiveFormationHandler = (formationId) => {
-        dispatch({ type: 'ARCHIVE_FORMATION', payload: formationId });
-        navigate('/archive');
+        dispatch(archiveFormation(formationId))
+        window.location.reload()
+        // navigate('/archive');
     };
-    
+    const format = (date) => {
+        if (!date) return ''
+        const title = new Date(date).toLocaleDateString('fr-FR')
+        const sTitle = title.split('/')
+        const month = parseInt(sTitle[1]) - 1
+        const monthNames = ["Janvier", "février", "mars", "avril", "mai", "juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+        return sTitle[0] + " " + monthNames[month] + " " + sTitle[2]
+    }
 
     return (
         <div>
@@ -61,21 +72,21 @@ function Formation() {
                         </tr>
                     </thead>
                     <tbody>
-                        {formations?.map((item, id) => {
+                        {filtredFormations(formations).map((item, id) => {
                             return (
                                 <tr key={id}>
                                     <th scope="row">{id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.price}</td>
                                     <td>{item.description}</td>
-                                    <td>{item.startDate}</td>
-                                    <td>{item.endDate}</td>
+                                    <td>{format(item.startDate)}</td>
+                                    <td>{format(item.endDate)}</td>
                                     <td>{item.maxPlace}</td>
                                     <td>{item.center?.name}</td>
                                     <td>{item.totalinscrption}</td>
                                     <td>
                                         <button onClick={() => openEditModal(item.id)}>Edit</button>
-                                        <button onClick={() => archiveFormationHandler(item.id)}>Archive</button>
+                                        <button onClick={() => archiveFormationHandler(item._id)}>Archive</button>
                                     </td>
                                 </tr>
                             );

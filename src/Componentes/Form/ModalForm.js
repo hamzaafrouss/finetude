@@ -1,78 +1,51 @@
-import React, { useState } from 'react';
-import './ModalForm.css';
-import { useDispatch } from 'react-redux';
-import { createCenter } from '../../Store/Centers/actions';
+import React, { useState, useEffect } from 'react';
 
-const ModalForm = ({ open, onClose }) => {
-  const dispatch = useDispatch()
-  const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-  });
+function ModalForm({ center, onClose, onSubmit }) {
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
 
-  const closeModal = () => {
-    onClose(false);
-    setFormData({
-      name: '',
-      address: '',
-    });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleAddClick = () => {
-
-    const { name, address } = formData;
-
-    if (name && address) {
-
-      dispatch(createCenter({name, address}))
-
-      // Close the modal
-      closeModal();
+  useEffect(() => {
+    if (center) {
+      setName(center.name);
+      setAddress(center.address);
     } else {
-      alert('Please fill in all fields.');
+      setName('');
+      setAddress('');
     }
+  }, [center]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedCenter = { ...center, name, address };
+    console.log("Submitting updated center:", updatedCenter);
+    onSubmit(updatedCenter);
   };
 
   return (
-    <>
-      {open && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <form>
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-
-              <label htmlFor="address">Address:</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                required
-              />
-
-              <button type="button" onClick={handleAddClick}>Add</button>
-            </form>
-          </div>
-        </div>
-      )}
-    </>
-
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>{center ? 'Edit Center' : 'Add Center'}</h2>
+        <form onSubmit={handleSubmit}>
+          <label>Name:</label>
+          <input 
+            type="text" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            required 
+          />
+          <label>Address:</label>
+          <input 
+            type="text" 
+            value={address} 
+            onChange={(e) => setAddress(e.target.value)} 
+            required 
+          />
+          <button type="submit">{center ? 'Update' : 'Add'}</button>
+        </form>
+      </div>
+    </div>
   );
-};
+}
 
 export default ModalForm;

@@ -1,4 +1,4 @@
-import { CREATE_FORMATION, CREATE_FORMATION_FAILED, CREATE_FORMATION_SUCCESS, GET_ALL_FORMATIONS, GET_ALL_FORMATIONS_FAILED, GET_ALL_FORMATIONS_SUCCESS } from "./actions-definitions";
+import { CREATE_FORMATION, CREATE_FORMATION_FAILED, CREATE_FORMATION_SUCCESS, GET_ALL_FORMATIONS, GET_ALL_FORMATIONS_FAILED, GET_ALL_FORMATIONS_SUCCESS , SET_FORMATION_ARCHIVED, SET_ARCHIVED_FAILED, SET_ARCHIVED_SUCCESS} from "./actions-definitions";
 
 export const createFormation = (data) => {
     console.log('action', data)
@@ -35,15 +35,18 @@ export const getAllFormationsFailed = (error) => ({
     payload: error
 })
 export const archiveFormation = (formationId) => {
-    // Perform asynchronous operation to archive formation (e.g., make API call)
-    return async (dispatch, getState) => {
-        try {
-            // Here you can dispatch an action to archive the formation
-            // For example, you can dispatch an action to update the formation status to archived
-            // Dispatch your action here...
-        } catch (error) {
-            console.error('Error archiving formation:', error);
-            // Handle error if needed
-        }
-    };
+    return ({
+    type: SET_FORMATION_ARCHIVED,
+    payload: formationId
+    })
 };
+export const archivedFormationsFailed = (error) => ({
+    type: SET_ARCHIVED_FAILED,
+    payload: error
+})
+export const archivedFormationsSuccess = () => {
+    return ({
+        type: SET_ARCHIVED_SUCCESS,
+        payload: true
+    })
+}

@@ -1,7 +1,7 @@
-import { all, call, fork, put, takeEvery } from "redux-saga/effects"
-import { createFormationFailed, createFormationSuccess, getAllFormationsFailed, getAllFormationsSuccess } from "./actions"
-import { createFormationService, getAllFormationsService } from "./services"
-import { CREATE_FORMATION, GET_ALL_FORMATIONS } from "./actions-definitions"
+import { all, call, fork, put,  takeEvery } from "redux-saga/effects"
+import { createFormationFailed, createFormationSuccess, getAllFormationsFailed, getAllFormationsSuccess, archivedFormationsFailed, archivedFormationsSuccess } from "./actions"
+import { createFormationService, getAllFormationsService, setFormationArchived } from "./services"
+import { CREATE_FORMATION, GET_ALL_FORMATIONS, SET_FORMATION_ARCHIVED } from "./actions-definitions"
 
 function* createFormationSaga({ payload: { data } }) {
     console.log('saga', data)
@@ -11,6 +11,17 @@ function* createFormationSaga({ payload: { data } }) {
         yield put(createFormationSuccess(response))
     } catch (error) {
         yield put(createFormationFailed(error))
+
+    }
+}
+function* archivedFormationSaga({payload} ) {
+    
+    try {
+        const response = yield call(setFormationArchived, { data:payload })
+
+        yield put(archivedFormationsSuccess(response))
+    } catch (error) {
+        yield put(archivedFormationsFailed(error))
 
     }
 }
@@ -29,6 +40,7 @@ function* getAllFormationsSaga() {
     }
 }
 
+
 function* watchCreateFormation() {
     yield takeEvery(CREATE_FORMATION, createFormationSaga)
 }
@@ -36,9 +48,13 @@ function* watchCreateFormation() {
 function* watchGetAllFormations() {
     yield takeEvery(GET_ALL_FORMATIONS, getAllFormationsSaga)
 }
+function* watchSetArchivedFormation() {
+    yield takeEvery(SET_FORMATION_ARCHIVED, archivedFormationSaga)
+}
+
 
 function* formationSaga() {
-    yield all([fork(watchCreateFormation), fork(watchGetAllFormations)])
+    yield all([fork(watchCreateFormation), fork(watchGetAllFormations), fork(watchSetArchivedFormation)])
 }
 
 export default formationSaga

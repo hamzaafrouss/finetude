@@ -75,6 +75,7 @@ const ReserveModal = ({ type = "add", selectedReservation = null, open, onClose,
     } else {
       alert('Please fill in all fields.');
     }
+    window.location.reload()
   };
 
   return (

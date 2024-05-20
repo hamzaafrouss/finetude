@@ -18,6 +18,7 @@ const ReservationsReducer = (state = INIT_STATE, action) => {
             return { ...state, isLoading: false, error: action.payload }
         }
 
+        
         case EDIT_RESERVATION: {
             return { ...state, isLoading: true, error: null }
         }

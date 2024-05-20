@@ -10,3 +10,7 @@ export const createFormationService = async ({ data }) => {
 export const getAllFormationsService = async () => {
     return axios.get(`${process.env.REACT_APP_API_BASE_LINK}/formations`).then(res => res.data)
 }
+
+export const setFormationArchived = async ({data}) =>{
+    return axios.post(`${process.env.REACT_APP_API_BASE_LINK}/formations/archived`,{  id:data }).then(res => res.data)
+}
